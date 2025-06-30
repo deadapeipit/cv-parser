@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CV Parser Upload</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 600px;
+      margin: auto;
+      padding: 1rem;
+    }
+    input[type="file"] {
+      margin-bottom: 1rem;
+    }
+    pre {
+      background: #f4f4f4;
+      padding: 1rem;
+      overflow-x: auto;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <h1>Upload CV (PDF or DOCX)</h1>
+  <form id="upload-form" enctype="multipart/form-data">
+    <input type="file" name="file" accept=".pdf,.docx" required />
+    <button type="submit">Upload and Parse</button>
+  </form>
+  <h2>Result</h2>
+  <pre id="result">Waiting for file...</pre>
+
+  <script>
+    const form = document.getElementById('upload-form');
+    const result = document.getElementById('result');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const res = await fetch('/parse', {
+        method: 'POST',
+        body: formData
+      });
+      const json = await res.json();
+      result.textContent = JSON.stringify(json, null, 2);
+    });
+  </script>
+</body>
+</html>
